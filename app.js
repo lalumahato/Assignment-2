@@ -7,7 +7,6 @@ console.log('Facebook');
 console.log('Microsoft');
 console.groupEnd();
 
-
 // add table feature
 let users = [
     {
@@ -24,3 +23,5 @@ let users = [
     }
 ];
 console.table(users);
+
+/** Added test case */
