@@ -5,4 +5,22 @@ console.group();
 console.log('Google');
 console.log('Facebook');
 console.log('Microsoft');
-console.groupEnd()
+console.groupEnd();
+
+
+// add table feature
+let users = [
+    {
+        id: 101,
+        name: 'Jessica'
+    },
+    {
+        id: 102,
+        name: 'Smith'
+    },
+    {
+        id: 103,
+        name: 'Peter'
+    }
+];
+console.table(users);
