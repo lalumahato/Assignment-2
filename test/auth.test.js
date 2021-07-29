@@ -16,8 +16,8 @@ describe(('Auth Controllers'), () => {
     });
 
     // register new user
-    describe('/Register User => /POST /api/auth/register', () => {
-        it('It should not register new user without password.', () => {
+    describe('Register User => /POST /api/auth/register', () => {
+        it('It should not register new user without password.', (done) => {
             let user = {
                 name: 'John Connor',
                 email: 'john123@gmail.com',
@@ -33,10 +33,11 @@ describe(('Auth Controllers'), () => {
                     res.body.should.have.property('errors');
                     res.body.should.have.property('_message');
                     res.body._message.should.equal('User validation failed');
+                    done();
                 });
         });
 
-        it('It should register new user.', () => {
+        it('It should register new user.', (done) => {
             let user = {
                 name: 'John Connor',
                 email: 'john123@gmail.com',
@@ -56,6 +57,7 @@ describe(('Auth Controllers'), () => {
                     res.body.data.should.have.property('name');
                     res.body.data.should.have.property('email');
                     res.body.data.should.have.property('phone');
+                    done();
                 });
         });
     });

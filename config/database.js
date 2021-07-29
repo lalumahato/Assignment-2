@@ -8,7 +8,8 @@ const connectDB = async () => {
             keepAlive: 1,
             useCreateIndex: true,
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            useFindAndModify: false
         });
         console.log(chalk.blue(`Database connected to: ${conn.connection.host}`));
     } catch (e) {
