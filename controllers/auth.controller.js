@@ -1,6 +1,39 @@
 'use strict';
 const User = require('../models/user.model');
 
+/**
+ * Login user 
+ */
+const loginUser = async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
+        let message = 'Inavlid email and password';
+        // match email
+        let user = await User.findOne({ email }).select('+password');
+        if (!user) {
+            res.status(400).json({ status: 'failed', data: { message } });
+        }
+
+        // match password
+        let isMatched = user.matchPassword(password);
+        if (!isMatched) {
+            res.status(400).json({ status: 'failed', data: { message } });
+        }
+        user.password = undefined;
+
+        // generate token
+        let token = user.generateToken();
+
+        // send response
+        return res.json({ status: 'success', data: user, token });
+    } catch (ex) {
+        res.status(400).json(ex);
+    }
+}
+
+/**
+ * Register new user
+ */
 const registerUser = async (req, res, next) => {
     try {
         const { name, email, phone, password } = req.body;
@@ -23,5 +56,6 @@ const registerUser = async (req, res, next) => {
 }
 
 module.exports = {
-    registerUser
+    registerUser,
+    loginUser
 }

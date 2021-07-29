@@ -1,6 +1,7 @@
 'use strict';
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const UserSchema = new mongoose.Schema({
     name: {
@@ -20,6 +21,10 @@ const UserSchema = new mongoose.Schema({
         required: true,
         select: false
     },
+    registerType: {
+        type: String,
+        default: 'user'
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -36,5 +41,21 @@ UserSchema.pre('save', function (next) {
     this.password = bcrypt.hashSync(this.password, salt);
     next();
 });
+
+/** match password */
+UserSchema.methods.matchPassword = function (userPassword) {
+    let result = bcrypt.compareSync(userPassword, this.password);
+    return result;
+}
+
+/** generate token */
+UserSchema.methods.generateToken = function () {
+    let token = jwt.sign({
+        _id: this._id,
+        email: this.email,
+        registerType: this.registerType
+    }, process.env.JWT_SECRET_KEY);
+    return token;
+}
 
 module.exports = mongoose.model('User', UserSchema);
