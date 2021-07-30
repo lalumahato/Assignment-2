@@ -61,6 +61,30 @@ describe('User Controllers', () => {
 
     // update user by userId
     describe('Update User => /PUT /api/user/update-user/:userId', () => {
+        it('It should not update user with invalid userId', (done) => {
+            let user = new User({
+                name: 'Meagan Nima',
+                email: 'Meagan83@yahoo.com',
+                phone: '945-653-2605',
+                password: 'User@1234'
+            });
+            let temp = new User();
+            user.save((err, user) => {
+                chai.request(server)
+                    .put('/api/user/update-user/' + temp._id)
+                    .send({ name: 'Smith Parker', phone: '945-653-2605' })
+                    .end((err, res) => {
+                        res.should.be.a.json;
+                        res.should.have.status(400);
+                        res.body.should.have.property('data');
+                        res.body.should.have.property('status');
+                        res.body.status.should.equal('failed');
+                        res.body.data.should.have.property('message').eql('User not found with userId: ' + temp._id)
+                        done();
+                    });
+            });
+        });
+
         it('It should update user detail of a given id', (done) => {
             let user = new User({
                 name: 'Peter Parker',
@@ -91,6 +115,28 @@ describe('User Controllers', () => {
 
     // Delete user by UserId
     describe('Delete User => /DELETE /api/user/delete-user/:userId', () => {
+        it('It should not delete user with invalid userId', (done) => {
+            let user = new User({
+                name: 'Meagan Nima',
+                email: 'Meagan83@yahoo.com',
+                phone: '945-653-2605',
+                password: 'User@1234'
+            });
+            let temp = new User();
+            user.save((err, user) => {
+                chai.request(server)
+                    .delete('/api/user/delete-user/' + temp._id)
+                    .end((err, res) => {
+                        res.should.be.a.json;
+                        res.should.have.status(400);
+                        res.body.should.have.property('data');
+                        res.body.should.have.property('status');
+                        res.body.status.should.equal('failed');
+                        res.body.data.should.have.property('message').eql('User not found with userId: ' + temp._id)
+                        done();
+                    });
+            });
+        });
         it('It should delete a user by userId.', (done) => {
             let user = new User({
                 name: 'Peter Parker',
