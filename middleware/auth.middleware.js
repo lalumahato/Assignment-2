@@ -23,13 +23,15 @@ const protect = async (req, res, next) => {
         try {
             let decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
             let user = await User.findById(decoded._id);
-            if (!user) {
-                message = 'The user belonging to this token does not exist.';
-                res.status(httpStatus.UNAUTHORIZED).json({ status: 'failed', data: { message } });
-            } else {
-                req.user = user;
-                next();
-            }
+            req.user = decoded;
+            next();
+            // if (!user) {
+            //     message = 'The user belonging to this token does not exist.';
+            //     res.status(httpStatus.UNAUTHORIZED).json({ status: 'failed', data: { message } });
+            // } else {
+            //     req.user = user;
+            //     next();
+            // }
         } catch (e) {
             res.status(httpStatus.UNAUTHORIZED).json({ status: 'failed', data: { message } });
         }

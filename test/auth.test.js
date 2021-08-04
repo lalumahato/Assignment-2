@@ -78,7 +78,7 @@ describe(('Auth Controllers'), () => {
                     .send({ email: 'john@gmail.com', password: 'User@1234' })
                     .end((err, res) => {
                         res.should.be.a.json;
-                        res.should.have.status(400);
+                        res.should.have.status(401);
                         res.body.should.have.property('data');
                         res.body.should.have.property('status');
                         res.body.status.should.equal('failed');

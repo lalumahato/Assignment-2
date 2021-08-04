@@ -5,6 +5,7 @@ const chaiHttp = require('chai-http');
 const server = require('../server');
 const User = require('../models/user.model');
 const should = chai.should();
+const token = process.env.JWT_TOKEN;
 
 chai.use(chaiHttp);
 
@@ -21,6 +22,7 @@ describe('User Controllers', () => {
         it('It should return all users list.', (done) => {
             chai.request(server)
                 .get('/api/user/list-users')
+                .set({ 'Authorization': `Bearer ${token}` })
                 .end((err, res) => {
                     res.should.be.a.json;
                     res.should.have.status(200);
@@ -45,6 +47,7 @@ describe('User Controllers', () => {
             user.save((err, user) => {
                 chai.request(server)
                     .get('/api/user/find-user/' + user.id)
+                    .set({ 'Authorization': `Bearer ${token}` })
                     .end((err, res) => {
                         res.should.be.a.json;
                         res.should.have.status(200);
@@ -72,6 +75,7 @@ describe('User Controllers', () => {
             user.save((err, user) => {
                 chai.request(server)
                     .put('/api/user/update-user/' + temp._id)
+                    .set({ 'Authorization': `Bearer ${token}` })
                     .send({ name: 'Smith Parker', phone: '945-653-2605' })
                     .end((err, res) => {
                         res.should.be.a.json;
@@ -95,6 +99,7 @@ describe('User Controllers', () => {
             user.save((err, user) => {
                 chai.request(server)
                     .put('/api/user/update-user/' + user.id)
+                    .set({ 'Authorization': `Bearer ${token}` })
                     .send({ name: 'Dave parker', 'phone': '9836273928' })
                     .end((err, res) => {
                         res.should.be.a.json;
@@ -126,6 +131,7 @@ describe('User Controllers', () => {
             user.save((err, user) => {
                 chai.request(server)
                     .delete('/api/user/delete-user/' + temp._id)
+                    .set({ 'Authorization': `Bearer ${token}` })
                     .end((err, res) => {
                         res.should.be.a.json;
                         res.should.have.status(400);
@@ -147,6 +153,7 @@ describe('User Controllers', () => {
             user.save((err, user) => {
                 chai.request(server)
                     .delete('/api/user/delete-user/' + user.id)
+                    .set({ 'Authorization': `Bearer ${token}` })
                     .end((err, res) => {
                         res.should.be.a.json;
                         res.should.have.status(200);
