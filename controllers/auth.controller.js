@@ -1,5 +1,6 @@
 'use strict';
 const User = require('../models/user.model');
+const { matchPassword } = require('../helpers/password.helper');
 
 /**
  * Login user 
@@ -11,13 +12,13 @@ const loginUser = async (req, res, next) => {
         // match email
         let user = await User.findOne({ email }).select('+password');
         if (!user) {
-            res.status(400).json({ status: 'failed', data: { message } });
+            return res.status(401).json({ status: 'failed', data: { message } });
         }
 
         // match password
-        let isMatched = user.matchPassword(password);
+        let isMatched = await matchPassword(password, user.password);
         if (!isMatched) {
-            res.status(400).json({ status: 'failed', data: { message } });
+            return res.status(401).json({ status: 'failed', data: { message } });
         }
         user.password = undefined;
 

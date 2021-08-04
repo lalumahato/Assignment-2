@@ -4,7 +4,10 @@ const express = require('express');
 const chalk = require('chalk');
 const routes = require('./routes');
 const cors = require('cors');
+const morgan = require('morgan');
+const swaggerUi = require('swagger-ui-express');
 const connectDB = require('./config/database');
+const swaggerDocument = require('./swagger.json');
 
 /** initial app and port */
 const app = express();
@@ -16,6 +19,14 @@ app.use(cors());
 /** use body parser */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+/** apis logger */
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
+
+/** Swaggger UI */
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 /** default route */
 app.get('/', (req, res, next) => {
