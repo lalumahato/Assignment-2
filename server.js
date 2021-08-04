@@ -8,6 +8,7 @@ const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
 const connectDB = require('./config/database');
 const swaggerDocument = require('./swagger.json');
+const logger = require('./config/winston');
 
 /** initial app and port */
 const app = express();
@@ -41,6 +42,7 @@ app.use('/api', routes);
 let server = app.listen(PORT, () => {
     connectDB();
     console.log(chalk.blue(`Server listening on port:${PORT}`));
+    logger.info(`Server listening on port:${PORT}`);
 });
 
 module.exports = server;
